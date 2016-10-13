@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 7
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+before_script:
+  - composer self-update
+  - composer install --dev --prefer-source
+
+script:
+  - ./vendor/bin/phpunit
+
+notifications:
+  email: false

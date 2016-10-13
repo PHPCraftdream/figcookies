@@ -1,0 +1,33 @@
+{
+    "name": "phpcraftdream/figcookies",
+    "description": "Cookies for PSR-7 HTTP Message Interface.",
+    "license": "MIT",
+    "keywords": ["psr7", "psr-7", "cookies", "cookie"],
+    "authors": [
+        {
+            "name": "Beau Simensen",
+            "email": "beau@dflydev.com"
+        },
+        {
+            "name": "PHPCraftdream",
+            "email": "phpcraftdream@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "psr/http-message": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPCraftdream\\FigCookies\\": "src/lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPCraftdream\\FigCookies\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.6"
+    }
+}
