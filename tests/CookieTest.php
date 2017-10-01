@@ -2,22 +2,19 @@
 
 namespace PHPCraftdream\FigCookies;
 
-class SetCookieTest extends \PHPUnit_Framework_TestCase
-{
+class SetCookieTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @test
 	 * @dataProvider provideParsesFromSetCookieStringData
 	 */
-	public function it_parses_from_set_cookie_string($cookieString, Cookie $expectedSetCookie)
-	{
+	public function it_parses_from_set_cookie_string($cookieString, Cookie $expectedSetCookie) {
 		$setCookie = (new Cookie())->parse($cookieString);
 
 		$this->assertEquals($expectedSetCookie, $setCookie);
-		$this->assertEquals($cookieString, (string) $setCookie);
+		$this->assertEquals($cookieString, (string)$setCookie);
 	}
 
-	public function provideParsesFromSetCookieStringData()
-	{
+	public function provideParsesFromSetCookieStringData() {
 		return [
 			[
 				'someCookie=',
@@ -114,8 +111,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function it_expires_cookies()
-	{
+	public function it_expires_cookies() {
 		$setCookie = (new Cookie('expire_immediately'))->setExpires();
 
 		$this->assertLessThan(time(), $setCookie->getExpires());
@@ -124,8 +120,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function it_creates_long_living_cookies()
-	{
+	public function it_creates_long_living_cookies() {
 		$setCookie = (new Cookie('remember_forever'))->rememberForever();
 
 		$fourYearsFromNow = (new \DateTime('+4 years'))->getTimestamp();

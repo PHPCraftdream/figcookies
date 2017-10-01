@@ -4,86 +4,74 @@ namespace PHPCraftdream\FigCookies;
 
 use Psr\Http\Message\StreamInterface;
 
-trait FigCookieTestingMessage
-{
-    private $headers = [];
-    public function getProtocolVersion()
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+trait FigCookieTestingMessage {
+	private $headers = [];
 
-    public function withProtocolVersion($version)
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+	public function getProtocolVersion() {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-    public function hasHeader($name)
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+	public function withProtocolVersion($version) {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-    public function withHeader($name, $value)
-    {
-        $this->headers[$name] = [$value];
+	public function hasHeader($name) {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-        return $this;
-    }
+	public function withHeader($name, $value) {
+		$this->headers[$name] = [$value];
 
-    public function withAddedHeader($name, $value)
-    {
-        if (!isset($this->headers[$name])) {
-            $this->headers[$name] = [];
-        }
+		return $this;
+	}
 
-        $this->headers[$name][] = $value;
+	public function withAddedHeader($name, $value) {
+		if (!isset($this->headers[$name])) {
+			$this->headers[$name] = [];
+		}
 
-        return $this;
-    }
+		$this->headers[$name][] = $value;
 
-    public function withoutHeader($name)
-    {
-        if (isset($this->headers[$name])) {
-            unset($this->headers[$name]);
-        }
+		return $this;
+	}
 
-        return $this;
-    }
+	public function withoutHeader($name) {
+		if (isset($this->headers[$name])) {
+			unset($this->headers[$name]);
+		}
 
-    public function getBody()
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+		return $this;
+	}
 
-    public function withBody(StreamInterface $body)
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+	public function getBody() {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-    public function getHeaders()
-    {
-        throw new \RuntimeException("This method has not been implemented.");
-    }
+	public function withBody(StreamInterface $body) {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-    public function getHeader($name)
-    {
-        if (!isset($this->headers[$name])) {
-            return [];
-        }
+	public function getHeaders() {
+		throw new \RuntimeException("This method has not been implemented.");
+	}
 
-        return $this->headers[$name];
-    }
+	public function getHeader($name) {
+		if (!isset($this->headers[$name])) {
+			return [];
+		}
 
-    public function getHeaderLine($name)
-    {
-        return implode(',', $this->headers[$name]);
-    }
+		return $this->headers[$name];
+	}
 
-    public function getHeaderLines($name)
-    {
-        if (!isset($this->headers[$name])) {
-            return [];
-        }
+	public function getHeaderLine($name) {
+		return implode(',', $this->headers[$name]);
+	}
 
-        return $this->headers[$name];
-    }
+	public function getHeaderLines($name) {
+		if (!isset($this->headers[$name])) {
+			return [];
+		}
+
+		return $this->headers[$name];
+	}
 }
