@@ -8,7 +8,7 @@ Managing Cookies for PSR-7 Requests and Responses. It is fork from [dflydev/dfly
 Requirements
 ------------
 
- * PHP 7.0+
+ * PHP 7.1+
  * [psr/http-message](https://packagist.org/packages/psr/http-message)
 
 
