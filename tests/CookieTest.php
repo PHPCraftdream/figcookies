@@ -1,8 +1,9 @@
 <?php
 
 namespace PHPCraftdream\FigCookies;
+use PHPUnit\Framework\TestCase;
 
-class SetCookieTest extends \PHPUnit_Framework_TestCase {
+class SetCookieTest extends TestCase {
 	/**
 	 * @test
 	 * @dataProvider provideParsesFromSetCookieStringData

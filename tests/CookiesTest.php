@@ -1,8 +1,9 @@
 <?php
 
 namespace PHPCraftdream\FigCookies;
+use PHPUnit\Framework\TestCase;
 
-class CookiesTest extends \PHPUnit_Framework_TestCase {
+class CookiesTest extends TestCase {
 	const INTERFACE_PSR_HTTP_MESSAGE_RESPONSE = 'Psr\Http\Message\ResponseInterface';
 
 	/**
