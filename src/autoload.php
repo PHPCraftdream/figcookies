@@ -1,8 +1,7 @@
 <?php
 
 call_user_func_array(
-	function ()
-	{
+	function () {
 		$ds = DIRECTORY_SEPARATOR;
 		$libDir = $ds . 'lib' . $ds;
 
@@ -15,8 +14,7 @@ call_user_func_array(
 		);
 
 		spl_autoload_register(
-			function ($className) use ($items, $libDir)
-			{
+			function ($className) use ($items, $libDir) {
 				if (strlen($className) < 21) return;
 
 				if (!array_key_exists($className, $items))

@@ -2,8 +2,8 @@
 
 namespace PHPCraftdream\FigCookies;
 
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface CookiesInterface {
 	public function __construct();

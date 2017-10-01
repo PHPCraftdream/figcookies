@@ -5,8 +5,7 @@ namespace PHPCraftdream\FigCookies;
 use DateTime;
 use DateTimeInterface;
 
-class Cookie implements CookieInterface
-{
+class Cookie implements CookieInterface {
 	use StringUtilTrait;
 
 	protected $isChanged = false;
@@ -19,108 +18,95 @@ class Cookie implements CookieInterface
 	protected $secure = false;
 	protected $httpOnly = false;
 
-	public function __construct($name = NULL, $value = NULL)
-	{
+	public function __construct($name = NULL, $value = NULL) {
 		$this->name = $name;
 		$this->value = $value;
 		$this->isChanged = false;
 	}
 
 	protected $isNew = false;
-	public function setItNew(): CookieInterface
-	{
+
+	public function setItNew(): CookieInterface {
 		$this->isChanged = true;
 		$this->isNew = true;
 		return $this;
 	}
 
-	public function isNew(): bool
-	{
+	public function isNew(): bool {
 		return (bool)$this->isNew;
 	}
 
-	public function isChanged(): bool
-	{
+	public function isChanged(): bool {
 		return (bool)$this->isChanged;
 	}
 
-	public function resetChanged()
-	{
+	public function resetChanged() {
 		return $this->isChanged = false;
 	}
 
-	public function getName()
-	{
+	public function getName() {
 		return $this->name;
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		return $this->value;
 	}
 
-	public function getExpires()
-	{
+	public function getExpires() {
 		return $this->expires;
 	}
 
-	public function getMaxAge()
-	{
+	public function getMaxAge() {
 		return $this->maxAge;
 	}
 
-	public function getPath()
-	{
+	public function getPath() {
 		return $this->path;
 	}
 
-	public function getDomain()
-	{
+	public function getDomain() {
 		return $this->domain;
 	}
 
-	public function getSecure()
-	{
+	public function getSecure() {
 		return $this->secure;
 	}
 
-	public function getHttpOnly()
-	{
+	public function getHttpOnly() {
 		return $this->httpOnly;
 	}
 
-	public function setName(string $name = NULL): CookieInterface
-	{
+	public function setName(string $name = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->name = $name;
 
 		return $this;
 	}
 
-	public function setValue(string $value = NULL): CookieInterface
-	{
+	public function setValue(string $value = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->value = $value;
 
 		return $this;
 	}
 
-	protected function resolveExpires($expires = NULL)
-	{
-		if (is_null($expires))
+	protected function resolveExpires($expires = NULL) {
+		if (is_null($expires)) {
 			return null;
+		}
 
-		if ($expires instanceof DateTimeInterface)
+		if ($expires instanceof DateTimeInterface) {
 			return $expires->getTimestamp();
+		}
 
-		if (is_numeric($expires))
+		if (is_numeric($expires)) {
 			return $expires;
+		}
 
 		return strtotime($expires);
 	}
 
-	public function setExpires($expires = NULL): CookieInterface
-	{
+	public function setExpires($expires = NULL): CookieInterface {
 		$this->isChanged = true;
 		$expires = $this->resolveExpires($expires);
 
@@ -129,60 +115,51 @@ class Cookie implements CookieInterface
 		return $this;
 	}
 
-	public function rememberForever(): CookieInterface
-	{
+	public function rememberForever(): CookieInterface {
 		return $this->setExpires(new DateTime('+5 years'));
 	}
 
-	public function expire(): CookieInterface
-	{
+	public function expire(): CookieInterface {
 		return $this->setExpires(new DateTime('-5 years'));
 	}
 
-	public function setMaxAge($maxAge = NULL): CookieInterface
-	{
+	public function setMaxAge($maxAge = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->maxAge = $maxAge;
 
 		return $this;
 	}
 
-	public function setPath($path = NULL): CookieInterface
-	{
+	public function setPath($path = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->path = $path;
 
 		return $this;
 	}
 
-	public function setDomain($domain = NULL): CookieInterface
-	{
+	public function setDomain($domain = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->domain = $domain;
 
 		return $this;
 	}
 
-	public function setSecure($secure = NULL): CookieInterface
-	{
+	public function setSecure($secure = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->secure = $secure;
 
 		return $this;
 	}
 
-	public function setHttpOnly($httpOnly = NULL): CookieInterface
-	{
+	public function setHttpOnly($httpOnly = NULL): CookieInterface {
 		$this->isChanged = true;
 		$this->httpOnly = $httpOnly;
 
 		return $this;
 	}
 
-	public function __toString()
-	{
-		if ($this->isNew() || $this->isChanged())
-		{
+	public function __toString() {
+		if ($this->isNew() || $this->isChanged()) {
 			$cookieStringParts = [
 				urlencode($this->name) . '=' . urlencode($this->value),
 			];
@@ -200,67 +177,67 @@ class Cookie implements CookieInterface
 		return '';
 	}
 
-	protected function appendFormattedDomainPartIfSet(array $cookieStringParts): array
-	{
-		if ($this->domain)
+	protected function appendFormattedDomainPartIfSet(array $cookieStringParts): array {
+		if ($this->domain) {
 			$cookieStringParts[] = sprintf("Domain=%s", $this->domain);
+		}
 
 		return $cookieStringParts;
 	}
 
-	protected function appendFormattedPathPartIfSet(array $cookieStringParts): array
-	{
-		if ($this->path)
+	protected function appendFormattedPathPartIfSet(array $cookieStringParts): array {
+		if ($this->path) {
 			$cookieStringParts[] = sprintf("Path=%s", $this->path);
+		}
 
 		return $cookieStringParts;
 	}
 
-	protected function appendFormattedExpiresPartIfSet(array $cookieStringParts): array
-	{
-		if ($this->expires)
+	protected function appendFormattedExpiresPartIfSet(array $cookieStringParts): array {
+		if ($this->expires) {
 			$cookieStringParts[] = sprintf("Expires=%s", gmdate('D, d M Y H:i:s T', $this->expires));
+		}
 
 		return $cookieStringParts;
 	}
 
-	protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts): array
-	{
-		if ($this->maxAge)
+	protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts): array {
+		if ($this->maxAge) {
 			$cookieStringParts[] = sprintf("Max-Age=%s", $this->maxAge);
+		}
 
 		return $cookieStringParts;
 	}
 
-	protected function appendFormattedSecurePartIfSet(array $cookieStringParts): array
-	{
-		if ($this->secure)
+	protected function appendFormattedSecurePartIfSet(array $cookieStringParts): array {
+		if ($this->secure) {
 			$cookieStringParts[] = 'Secure';
+		}
 
 		return $cookieStringParts;
 	}
 
-	protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts): array
-	{
-		if ($this->httpOnly)
+	protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts): array {
+		if ($this->httpOnly) {
 			$cookieStringParts[] = 'HttpOnly';
+		}
 
 		return $cookieStringParts;
 	}
 
-	public function parse(string $string): CookieInterface
-	{
+	public function parse(string $string): CookieInterface {
 		$rawAttributes = $this->splitOnAttributeDelimiter($string);
 		list($cookieName, $cookieValue) = $this->splitCookiePair(array_shift($rawAttributes));
 
-		if (!is_null($cookieName))
+		if (!is_null($cookieName)) {
 			$this->setName($cookieName);
+		}
 
-		if (!is_null($cookieValue))
+		if (!is_null($cookieValue)) {
 			$this->setValue($cookieValue);
+		}
 
-		while ($rawAttribute = array_shift($rawAttributes))
-		{
+		while ($rawAttribute = array_shift($rawAttributes)) {
 			$rawAttributePair = explode('=', $rawAttribute, 2);
 
 			$attributeKey = $rawAttributePair[0];
@@ -268,31 +245,30 @@ class Cookie implements CookieInterface
 
 			$attributeKey = strtolower($attributeKey);
 
-			switch ($attributeKey)
-			{
+			switch ($attributeKey) {
 				case 'expires':
 					$this->setExpires($attributeValue);
-				break;
+					break;
 
 				case 'max-age':
 					$this->setMaxAge($attributeValue);
-				break;
+					break;
 
 				case 'domain':
 					$this->setDomain($attributeValue);
-				break;
+					break;
 
 				case 'path':
 					$this->setPath($attributeValue);
-				break;
+					break;
 
 				case 'secure':
 					$this->setSecure(true);
-				break;
+					break;
 
 				case 'httponly':
 					$this->setHttpOnly(true);
-				break;
+					break;
 			}
 		}
 
