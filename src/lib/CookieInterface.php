@@ -10,6 +10,8 @@ interface CookieInterface
 	public function __construct($name = NULL, $value = NULL);
 	public function setItNew(): CookieInterface;
 	public function isNew(): bool;
+	public function isChanged(): bool;
+	public function resetChanged();
 	public function getName();
 	public function getValue();
 	public function getExpires();

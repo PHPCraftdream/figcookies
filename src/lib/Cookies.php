@@ -16,8 +16,9 @@ class Cookies implements CookiesInterface
 
 	public function __construct(array $cookies = [])
 	{
-		foreach ($cookies as $cookie)
+		foreach ($cookies as $cookie) {
 			$this->cookies[$cookie->getName()] = $cookie;
+		}
 	}
 
 	public function has($name): bool
@@ -27,8 +28,9 @@ class Cookies implements CookiesInterface
 
 	public function get($name): CookieInterface
 	{
-		if (!$this->has($name))
+		if (!$this->has($name)) {
 			$this->cookies[$name] = $this->newCookie($name)->setItNew();
+		}
 
 		return $this->cookies[$name];
 	}
@@ -47,8 +49,9 @@ class Cookies implements CookiesInterface
 
 	public function delete(string $name): CookiesInterface
 	{
-		if (!$this->has($name))
+		if (!$this->has($name)) {
 			return $this;
+		}
 
 		unset($this->cookies[$name]);
 		return $this;
@@ -59,7 +62,16 @@ class Cookies implements CookiesInterface
 		$response = $response->withoutHeader(self::SET_COOKIE_HEADER);
 
 		foreach ($this->cookies as $cookie)
-			$response = $response->withAddedHeader(self::SET_COOKIE_HEADER, (string) $cookie);
+		{
+			$cookieStr = $cookie->__toString();
+
+			if (empty($cookieStr))
+			{
+				continue;
+			}
+
+			$response = $response->withAddedHeader(self::SET_COOKIE_HEADER, $cookieStr);
+		}
 
 		return $response;
 	}
@@ -76,7 +88,10 @@ class Cookies implements CookiesInterface
 	{
 		$cookieString = implode('; ', $this->cookies);
 
-		$request = $request->withHeader(self::COOKIE_HEADER, $cookieString);
+		if (!empty($cookieString))
+		{
+			$request = $request->withHeader(self::COOKIE_HEADER, $cookieString);
+		}
 
 		return $request;
 	}

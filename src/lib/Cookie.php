@@ -9,6 +9,7 @@ class Cookie implements CookieInterface
 {
 	use StringUtilTrait;
 
+	protected $isChanged = false;
 	protected $name;
 	protected $value;
 	protected $expires = 0;
@@ -20,13 +21,15 @@ class Cookie implements CookieInterface
 
 	public function __construct($name = NULL, $value = NULL)
 	{
-		$this->setName($name);
-		$this->setValue($value);
+		$this->name = $name;
+		$this->value = $value;
+		$this->isChanged = false;
 	}
 
 	protected $isNew = false;
 	public function setItNew(): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->isNew = true;
 		return $this;
 	}
@@ -34,6 +37,16 @@ class Cookie implements CookieInterface
 	public function isNew(): bool
 	{
 		return (bool)$this->isNew;
+	}
+
+	public function isChanged(): bool
+	{
+		return (bool)$this->isChanged;
+	}
+
+	public function resetChanged()
+	{
+		return $this->isChanged = false;
 	}
 
 	public function getName()
@@ -78,6 +91,7 @@ class Cookie implements CookieInterface
 
 	public function setName(string $name = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->name = $name;
 
 		return $this;
@@ -85,6 +99,7 @@ class Cookie implements CookieInterface
 
 	public function setValue(string $value = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->value = $value;
 
 		return $this;
@@ -106,6 +121,7 @@ class Cookie implements CookieInterface
 
 	public function setExpires($expires = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$expires = $this->resolveExpires($expires);
 
 		$this->expires = $expires;
@@ -125,6 +141,7 @@ class Cookie implements CookieInterface
 
 	public function setMaxAge($maxAge = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->maxAge = $maxAge;
 
 		return $this;
@@ -132,6 +149,7 @@ class Cookie implements CookieInterface
 
 	public function setPath($path = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->path = $path;
 
 		return $this;
@@ -139,6 +157,7 @@ class Cookie implements CookieInterface
 
 	public function setDomain($domain = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->domain = $domain;
 
 		return $this;
@@ -146,6 +165,7 @@ class Cookie implements CookieInterface
 
 	public function setSecure($secure = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->secure = $secure;
 
 		return $this;
@@ -153,6 +173,7 @@ class Cookie implements CookieInterface
 
 	public function setHttpOnly($httpOnly = NULL): CookieInterface
 	{
+		$this->isChanged = true;
 		$this->httpOnly = $httpOnly;
 
 		return $this;
@@ -160,18 +181,23 @@ class Cookie implements CookieInterface
 
 	public function __toString()
 	{
-		$cookieStringParts = [
-			urlencode($this->name) . '=' . urlencode($this->value),
-		];
+		if ($this->isNew() || $this->isChanged())
+		{
+			$cookieStringParts = [
+				urlencode($this->name) . '=' . urlencode($this->value),
+			];
 
-		$cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
-		$cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
-		$cookieStringParts = $this->appendFormattedExpiresPartIfSet($cookieStringParts);
-		$cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
-		$cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
-		$cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedExpiresPartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
+			$cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
 
-		return implode('; ', $cookieStringParts);
+			return implode('; ', $cookieStringParts);
+		}
+
+		return '';
 	}
 
 	protected function appendFormattedDomainPartIfSet(array $cookieStringParts): array
@@ -269,6 +295,9 @@ class Cookie implements CookieInterface
 				break;
 			}
 		}
+
+		$this->isChanged = false;
+		$this->isNew = false;
 
 		return $this;
 	}
