@@ -7,6 +7,8 @@ interface CookieInterface {
 
 	public function setItNew(): CookieInterface;
 
+	public function startObserveChanges(): CookieInterface;
+
 	public function isNew(): bool;
 
 	public function isChanged(): bool;

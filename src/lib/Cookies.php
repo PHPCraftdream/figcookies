@@ -35,6 +35,14 @@ class Cookies implements CookiesInterface {
 		return array_values($this->cookies);
 	}
 
+	public function setItNew(): CookiesInterface  {
+		foreach ($this->cookies as $cookie) {
+			$cookie->setItNew();
+		}
+
+		return $this;
+	}
+
 	public function add(CookieInterface $cookie): CookiesInterface {
 		$this->cookies[$cookie->getName()] = $cookie;
 
@@ -100,6 +108,7 @@ class Cookies implements CookiesInterface {
 		foreach ($cookiesStrArr as $cookieStr) {
 			$cookie = $this->newCookie();
 			$cookie->parse($cookieStr);
+			$cookie->startObserveChanges();
 			$this->add($cookie);
 		}
 
@@ -112,6 +121,7 @@ class Cookies implements CookiesInterface {
 		foreach ($cookieStrings as $cookieStr) {
 			$cookie = $this->newCookie();
 			$cookie->parse($cookieStr);
+			$cookie->startObserveChanges();
 
 			$this->cookies[$cookie->getName()] = $cookie;
 		}

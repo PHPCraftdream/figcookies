@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 class CookiesTest extends TestCase {
 	const INTERFACE_PSR_HTTP_MESSAGE_RESPONSE = 'Psr\Http\Message\ResponseInterface';
 
+	protected function getStrArrFromCookiesArr(array $cookiesArr) {
+		$getVals = function (Cookie $coo) {
+			return $coo->__toString();
+		};
+
+		return array_map($getVals, $cookiesArr);
+	}
+
 	/**
 	 * @param string[] $cookieStrings
 	 * @param Cookie[] $expectedCookies
@@ -17,9 +25,10 @@ class CookiesTest extends TestCase {
 		$response = $this->prophesize(static::INTERFACE_PSR_HTTP_MESSAGE_RESPONSE);
 		$response->getHeader(Cookies::SET_COOKIE_HEADER)->willReturn($cookieStrings);
 
-		$cookies = (new Cookies())->fromResponse($response->reveal());
+		$expectedCookiesStrArr = $this->getStrArrFromCookiesArr($expectedCookies);
+		$cookiesStrArr = $this->getStrArrFromCookiesArr((new Cookies())->fromResponse($response->reveal())->getAll());
 
-		$this->assertEquals($expectedCookies, $cookies->getAll());
+		$this->assertEquals($expectedCookiesStrArr, $cookiesStrArr);
 	}
 
 	/**
@@ -32,7 +41,10 @@ class CookiesTest extends TestCase {
 	public function it_creates_from_set_cookie_strings($cookieStrings, array $expectedCookies) {
 		$cookies = (new Cookies())->fromCookieStrings($cookieStrings);
 
-		$this->assertEquals($expectedCookies, $cookies->getAll());
+		$this->assertEquals(
+			$this->getStrArrFromCookiesArr($expectedCookies),
+			$this->getStrArrFromCookiesArr($cookies->getAll())
+		);
 	}
 
 	/**
@@ -59,10 +71,19 @@ class CookiesTest extends TestCase {
 	public function it_gets_set_cookie_by_name($cookieStrings, $CookieName, Cookie $expectedCookie = null) {
 		$cookies = (new Cookies())->fromCookieStrings($cookieStrings);
 
-		$this->assertEquals($expectedCookie === null, $cookies->get($CookieName)->isNew());
+		$exists = $cookies->has($CookieName);
 
-		if ($expectedCookie !== null)
-			$this->assertEquals($expectedCookie, $cookies->get($CookieName));
+		$coo = $cookies->get($CookieName);
+
+		$this->assertEquals($exists, !$coo->isNew());
+		$this->assertFalse($coo->isChanged());
+
+		if ($expectedCookie !== null) {
+			$this->assertFalse($expectedCookie->isNew());
+			$this->assertFalse($expectedCookie->isChanged());
+
+			$this->assertEquals($expectedCookie->__toString(), $coo->__toString());
+		}
 	}
 
 	/**
@@ -73,6 +94,8 @@ class CookiesTest extends TestCase {
 			->add(new Cookie('theme', 'blue'))
 			->delete('sessionToken')
 			->add(new Cookie('who', 'me'));
+
+		$cookies->setItNew();
 
 		$originalResponse = new FigCookieTestingResponse();
 		$response = $cookies->toResponse($originalResponse);
@@ -113,6 +136,8 @@ class CookiesTest extends TestCase {
 
 		// Include our encrypted session token with the rest of our cookies.
 		$cookies = $cookies->add($encryptedSessionToken);
+
+		$cookies->setItNew();
 
 		// Render our cookies, along with the newly decrypted session token, into a response.
 		$response = $cookies->toResponse($response);

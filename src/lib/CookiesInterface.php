@@ -12,6 +12,8 @@ interface CookiesInterface {
 
 	public function get($name): CookieInterface;
 
+	public function setItNew(): CookiesInterface;
+
 	public function getAll(): array;
 
 	public function add(CookieInterface $cookie): CookiesInterface;

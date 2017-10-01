@@ -21,7 +21,6 @@ class Cookie implements CookieInterface {
 	public function __construct($name = NULL, $value = NULL) {
 		$this->name = $name;
 		$this->value = $value;
-		$this->isChanged = false;
 	}
 
 	protected $isNew = false;
@@ -36,8 +35,16 @@ class Cookie implements CookieInterface {
 		return (bool)$this->isNew;
 	}
 
+	protected $observeStarted = false;
+	public function startObserveChanges(): CookieInterface {
+		$this->isChanged = false;
+		$this->observeStarted = true;
+		
+		return $this;
+	}
+
 	public function isChanged(): bool {
-		return (bool)$this->isChanged;
+		return ($this->observeStarted && (bool)$this->isChanged);
 	}
 
 	public function resetChanged() {
@@ -271,9 +278,6 @@ class Cookie implements CookieInterface {
 					break;
 			}
 		}
-
-		$this->isChanged = false;
-		$this->isNew = false;
 
 		return $this;
 	}

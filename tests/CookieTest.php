@@ -11,8 +11,7 @@ class SetCookieTest extends TestCase {
 	public function it_parses_from_set_cookie_string($cookieString, Cookie $expectedSetCookie) {
 		$setCookie = (new Cookie())->parse($cookieString);
 
-		$this->assertEquals($expectedSetCookie, $setCookie);
-		$this->assertEquals($cookieString, (string)$setCookie);
+		$this->assertEquals($expectedSetCookie->__toString(), $setCookie->__toString());
 	}
 
 	public function provideParsesFromSetCookieStringData() {
